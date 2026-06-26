@@ -1,0 +1,41 @@
+name: Terraform CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "feature" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Terraform Workflow
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      # Step 3: Terraform Init
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 4: Terraform Format Check
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      # Step 5: Terraform Validate
+      - name: Terraform Validate
+        run: terraform validate
+
+      # Step 6: Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan
